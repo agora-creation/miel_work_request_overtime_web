@@ -13,23 +13,24 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class Step2Screen extends StatefulWidget {
-  final String shopName;
-  final String shopUserName;
-  final String shopUserEmail;
-  final String shopUserTel;
-  final String workPeriod;
-  final String workContent;
-
-  final String remarks;
+  final String companyName;
+  final String companyUserName;
+  final String companyUserEmail;
+  final String companyUserTel;
+  final DateTime useStartedAt;
+  final DateTime useEndedAt;
+  final bool useAtPending;
+  final String useContent;
 
   const Step2Screen({
-    required this.shopName,
-    required this.shopUserName,
-    required this.shopUserEmail,
-    required this.shopUserTel,
-    required this.workPeriod,
-    required this.workContent,
-    required this.remarks,
+    required this.companyName,
+    required this.companyUserName,
+    required this.companyUserEmail,
+    required this.companyUserTel,
+    required this.useStartedAt,
+    required this.useEndedAt,
+    required this.useAtPending,
+    required this.useContent,
     super.key,
   });
 
@@ -58,72 +59,81 @@ class _Step2ScreenState extends State<Step2Screen> {
               const SizedBox(height: 24),
               ResponsiveBox(
                 children: [
-                  const Text('以下の申込内容で問題ないかご確認ください。'),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    '店舗名',
-                    child: FormValue(widget.shopName),
-                  ),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    '店舗責任者名',
-                    child: FormValue(widget.shopUserName),
-                  ),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    '店舗責任者メールアドレス',
-                    child: FormValue(widget.shopUserEmail),
-                  ),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    '店舗責任者電話番号',
-                    child: FormValue(widget.shopUserTel),
-                  ),
-                  const SizedBox(height: 24),
+                  const Text('以下の申請内容で問題ないかご確認ください。'),
+                  const SizedBox(height: 16),
                   const DottedDivider(),
                   const SizedBox(height: 16),
                   const Text(
-                    '作業情報',
+                    '申請者情報',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
-                    '作業期間',
-                    child: FormValue(widget.workPeriod),
+                    '店舗名',
+                    child: FormValue(widget.companyName),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '店舗責任者名',
+                    child: FormValue(widget.companyUserName),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '店舗責任者メールアドレス',
+                    child: FormValue(widget.companyUserEmail),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '店舗責任者電話番号',
+                    child: FormValue(widget.companyUserTel),
+                  ),
+                  const SizedBox(height: 16),
+                  const DottedDivider(),
+                  const SizedBox(height: 16),
+                  const Text(
+                    '作業情報',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '作業予定日時',
+                    child: FormValue(
+                      widget.useAtPending
+                          ? '未定'
+                          : '${dateText('yyyy年MM月dd日 HH:mm', widget.useStartedAt)}〜${dateText('yyyy年MM月dd日 HH:mm', widget.useEndedAt)}',
+                    ),
                   ),
                   const SizedBox(height: 8),
                   FormLabel(
                     '作業内容',
-                    child: FormValue(widget.workContent),
-                  ),
-                  const SizedBox(height: 24),
-                  const DottedDivider(),
-                  const SizedBox(height: 16),
-                  FormLabel(
-                    'その他連絡事項',
-                    child: FormValue(widget.remarks),
+                    child: FormValue(widget.useContent),
                   ),
                   const SizedBox(height: 16),
                   const DottedDivider(),
                   const SizedBox(height: 32),
                   CustomButton(
                     type: ButtonSizeType.lg,
-                    label: '上記内容で申し込む',
+                    label: '上記内容で申請する',
                     labelColor: kWhiteColor,
                     backgroundColor: kBlueColor,
                     onPressed: () async {
                       String? error = await overtimeProvider.create(
-                        shopName: widget.shopName,
-                        shopUserName: widget.shopUserName,
-                        shopUserEmail: widget.shopUserEmail,
-                        shopUserTel: widget.shopUserTel,
-                        workPeriod: widget.workPeriod,
-                        workContent: widget.workContent,
-                        remarks: widget.remarks,
+                        companyName: widget.companyName,
+                        companyUserName: widget.companyUserName,
+                        companyUserEmail: widget.companyUserEmail,
+                        companyUserTel: widget.companyUserTel,
+                        useStartedAt: widget.useStartedAt,
+                        useEndedAt: widget.useEndedAt,
+                        useAtPending: widget.useAtPending,
+                        useContent: widget.useContent,
                       );
                       if (error != null) {
                         if (!mounted) return;
