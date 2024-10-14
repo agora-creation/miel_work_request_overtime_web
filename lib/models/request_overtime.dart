@@ -10,7 +10,7 @@ class RequestOvertimeModel {
   DateTime _useStartedAt = DateTime.now();
   DateTime _useEndedAt = DateTime.now();
   bool _useAtPending = false;
-  String _companyContent = '';
+  String _useContent = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -24,7 +24,7 @@ class RequestOvertimeModel {
   DateTime get useStartedAt => _useStartedAt;
   DateTime get useEndedAt => _useEndedAt;
   bool get useAtPending => _useAtPending;
-  String get companyContent => _companyContent;
+  String get useContent => _useContent;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -41,7 +41,7 @@ class RequestOvertimeModel {
     _useStartedAt = data['useStartedAt'].toDate() ?? DateTime.now();
     _useEndedAt = data['useEndedAt'].toDate() ?? DateTime.now();
     _useAtPending = data['useAtPending'] ?? false;
-    _companyContent = data['companyContent'] ?? '';
+    _useContent = data['useContent'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);
