@@ -181,8 +181,8 @@ class _Step1ScreenState extends State<Step1Screen> {
                     '作業内容',
                     child: CustomTextField(
                       controller: useContent,
-                      textInputType: TextInputType.text,
-                      maxLines: 1,
+                      textInputType: TextInputType.multiline,
+                      maxLines: 5,
                     ),
                   ),
                   const SizedBox(height: 16),
