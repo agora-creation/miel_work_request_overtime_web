@@ -1,4 +1,6 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
 import 'package:miel_work_request_overtime_web/common/functions.dart';
 import 'package:miel_work_request_overtime_web/models/user.dart';
@@ -6,6 +8,7 @@ import 'package:miel_work_request_overtime_web/services/fm.dart';
 import 'package:miel_work_request_overtime_web/services/mail.dart';
 import 'package:miel_work_request_overtime_web/services/request_overtime.dart';
 import 'package:miel_work_request_overtime_web/services/user.dart';
+import 'package:path/path.dart' as p;
 
 class RequestOvertimeProvider with ChangeNotifier {
   final RequestOvertimeService _overtimeService = RequestOvertimeService();
@@ -36,6 +39,7 @@ class RequestOvertimeProvider with ChangeNotifier {
     required DateTime useEndedAt,
     required bool useAtPending,
     required String useContent,
+    required List<PlatformFile> pickedAttachedFiles,
   }) async {
     String? error;
     if (companyName == '') return '店舗名は必須入力です';
@@ -43,8 +47,24 @@ class RequestOvertimeProvider with ChangeNotifier {
     if (companyUserEmail == '') return '店舗責任者メールアドレスは必須入力です';
     if (companyUserTel == '') return '店舗責任者電話番号は必須入力です';
     try {
-      await FirebaseAuth.instance.signInAnonymously().then((value) {
+      await FirebaseAuth.instance.signInAnonymously().then((value) async {
         String id = _overtimeService.id();
+        List<String> attachedFiles = [];
+        if (pickedAttachedFiles.isNotEmpty) {
+          int i = 0;
+          for (final file in pickedAttachedFiles) {
+            String ext = p.extension(file.name);
+            storage.UploadTask uploadTask;
+            storage.Reference ref = storage.FirebaseStorage.instance
+                .ref()
+                .child('requestInterview')
+                .child('/${id}_$i$ext');
+            uploadTask = ref.putData(file.bytes!);
+            await uploadTask.whenComplete(() => null);
+            String url = await ref.getDownloadURL();
+            attachedFiles.add(url);
+          }
+        }
         _overtimeService.create({
           'id': id,
           'companyName': companyName,
@@ -54,6 +74,7 @@ class RequestOvertimeProvider with ChangeNotifier {
           'useStartedAt': useStartedAt,
           'useEndedAt': useEndedAt,
           'useAtPending': useAtPending,
+          'attachedFiles': attachedFiles,
           'approval': 0,
           'approvedAt': DateTime.now(),
           'approvalUsers': [],

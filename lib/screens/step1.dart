@@ -1,9 +1,11 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_request_overtime_web/common/custom_date_time_picker.dart';
 import 'package:miel_work_request_overtime_web/common/functions.dart';
 import 'package:miel_work_request_overtime_web/common/style.dart';
 import 'package:miel_work_request_overtime_web/providers/request_overtime.dart';
 import 'package:miel_work_request_overtime_web/screens/step2.dart';
+import 'package:miel_work_request_overtime_web/widgets/attached_file_list.dart';
 import 'package:miel_work_request_overtime_web/widgets/custom_button.dart';
 import 'package:miel_work_request_overtime_web/widgets/custom_text_field.dart';
 import 'package:miel_work_request_overtime_web/widgets/datetime_range_form.dart';
@@ -11,6 +13,7 @@ import 'package:miel_work_request_overtime_web/widgets/dotted_divider.dart';
 import 'package:miel_work_request_overtime_web/widgets/form_label.dart';
 import 'package:miel_work_request_overtime_web/widgets/responsive_box.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
 class Step1Screen extends StatefulWidget {
@@ -29,6 +32,7 @@ class _Step1ScreenState extends State<Step1Screen> {
   DateTime useEndedAt = DateTime.now();
   bool useAtPending = false;
   TextEditingController useContent = TextEditingController();
+  List<PlatformFile> pickedAttachedFiles = [];
 
   @override
   void initState() {
@@ -189,6 +193,44 @@ class _Step1ScreenState extends State<Step1Screen> {
                   const SizedBox(height: 16),
                   const DottedDivider(),
                   const SizedBox(height: 16),
+                  FormLabel(
+                    '添付ファイル',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomButton(
+                          type: ButtonSizeType.sm,
+                          label: 'ファイル選択',
+                          labelColor: kWhiteColor,
+                          backgroundColor: kGreyColor,
+                          onPressed: () async {
+                            final result = await FilePicker.platform.pickFiles(
+                              type: FileType.any,
+                            );
+                            if (result == null) return;
+                            pickedAttachedFiles.addAll(result.files);
+                            setState(() {});
+                          },
+                        ),
+                        const SizedBox(height: 4),
+                        Column(
+                          children: pickedAttachedFiles.map((file) {
+                            return AttachedFileList(
+                              fileName: p.basename(file.name),
+                              onTap: () {
+                                pickedAttachedFiles.remove(file);
+                                setState(() {});
+                              },
+                              isClose: true,
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const DottedDivider(),
+                  const SizedBox(height: 16),
                   const Text(
                     '作業規約',
                     style: TextStyle(
@@ -275,6 +317,7 @@ class _Step1ScreenState extends State<Step1Screen> {
                             useEndedAt: useEndedAt,
                             useAtPending: useAtPending,
                             useContent: useContent.text,
+                            pickedAttachedFiles: pickedAttachedFiles,
                           ),
                         ),
                       );
