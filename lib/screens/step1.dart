@@ -66,7 +66,7 @@ class _Step1ScreenState extends State<Step1Screen> {
               const SizedBox(height: 24),
               ResponsiveBox(
                 children: [
-                  const Text('以下のフォームにご入力いただき、申請を行なってください。'),
+                  const Text('以下のフォームにご入力いただき、作業規約を確認して申請を行なってください。'),
                   const SizedBox(height: 16),
                   const DottedDivider(),
                   const SizedBox(height: 16),
@@ -115,7 +115,8 @@ class _Step1ScreenState extends State<Step1Screen> {
                     '※このメールアドレス宛に、返答させていただきます',
                     style: TextStyle(
                       color: kRedColor,
-                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -183,6 +184,61 @@ class _Step1ScreenState extends State<Step1Screen> {
                       controller: useContent,
                       textInputType: TextInputType.multiline,
                       maxLines: 5,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const DottedDivider(),
+                  const SizedBox(height: 16),
+                  const Text(
+                    '作業規約',
+                    style: TextStyle(
+                      color: kRedColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    '※作業は店舗内のみで行い、トイレ以外は館内をむやみに移動しません',
+                    style: TextStyle(
+                      color: kRedColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
+                    ),
+                  ),
+                  const Text(
+                    '※火気には十分に注意して作業をします。終了時には火の元を点検して退場します',
+                    style: TextStyle(
+                      color: kRedColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
+                    ),
+                  ),
+                  const Text(
+                    '※建物周囲はすべて施錠しているので、内側から開錠して外に出ません',
+                    style: TextStyle(
+                      color: kRedColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
+                    ),
+                  ),
+                  const Text(
+                    '※その他夜間の居残りに関して、事故が起きた場合は、緊急連絡先や関係者に連絡します。また、その責任においては、有限会社ひろめカンパニーの指示に従います',
+                    style: TextStyle(
+                      color: kRedColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
+                    ),
+                  ),
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text('緊急連絡先：セコム コールセンター（088-885-6060）'),
+                        Text('百田 携帯（090-4506-0049）'),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 16),
