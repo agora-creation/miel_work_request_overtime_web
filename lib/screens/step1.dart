@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_request_overtime_web/common/custom_date_time_picker.dart';
 import 'package:miel_work_request_overtime_web/common/functions.dart';
 import 'package:miel_work_request_overtime_web/common/style.dart';
+import 'package:miel_work_request_overtime_web/models/request_overtime.dart';
 import 'package:miel_work_request_overtime_web/providers/request_overtime.dart';
 import 'package:miel_work_request_overtime_web/screens/step2.dart';
+import 'package:miel_work_request_overtime_web/services/request_overtime.dart';
 import 'package:miel_work_request_overtime_web/widgets/attached_file_list.dart';
 import 'package:miel_work_request_overtime_web/widgets/custom_button.dart';
 import 'package:miel_work_request_overtime_web/widgets/custom_text_field.dart';
@@ -24,6 +26,7 @@ class Step1Screen extends StatefulWidget {
 }
 
 class _Step1ScreenState extends State<Step1Screen> {
+  RequestOvertimeService overtimeService = RequestOvertimeService();
   TextEditingController companyName = TextEditingController();
   TextEditingController companyUserName = TextEditingController();
   TextEditingController companyUserEmail = TextEditingController();
@@ -33,6 +36,22 @@ class _Step1ScreenState extends State<Step1Screen> {
   bool useAtPending = false;
   TextEditingController useContent = TextEditingController();
   List<PlatformFile> pickedAttachedFiles = [];
+
+  void _getPrm() async {
+    String? id = Uri.base.queryParameters['id'];
+    if (id == null) return;
+    RequestOvertimeModel? overtime = await overtimeService.selectData(id);
+    if (overtime == null) return;
+    companyName.text = overtime.companyName;
+    companyUserName.text = overtime.companyUserName;
+    companyUserEmail.text = overtime.companyUserEmail;
+    companyUserTel.text = overtime.companyUserTel;
+    useStartedAt = overtime.useStartedAt;
+    useEndedAt = overtime.useEndedAt;
+    useAtPending = overtime.useAtPending;
+    useContent.text = overtime.useContent;
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -47,6 +66,7 @@ class _Step1ScreenState extends State<Step1Screen> {
     useEndedAt = useStartedAt.add(
       const Duration(hours: 2),
     );
+    _getPrm();
     super.initState();
   }
 
