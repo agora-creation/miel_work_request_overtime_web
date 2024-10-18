@@ -80,15 +80,20 @@ class RequestOvertimeProvider with ChangeNotifier {
           'approvalUsers': [],
           'createdAt': DateTime.now(),
         });
-      });
-      String useAtText = '';
-      if (useAtPending) {
-        useAtText = '未定';
-      } else {
-        useAtText =
-            '${dateText('yyyy/MM/dd HH:mm', useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', useEndedAt)}';
-      }
-      String message = '''
+        String useAtText = '';
+        if (useAtPending) {
+          useAtText = '未定';
+        } else {
+          useAtText =
+              '${dateText('yyyy/MM/dd HH:mm', useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', useEndedAt)}';
+        }
+        String attachedFilesText = '';
+        if (attachedFiles.isNotEmpty) {
+          for (final file in attachedFiles) {
+            attachedFilesText += '$file\n';
+          }
+        }
+        String message = '''
 ★★★このメールは自動返信メールです★★★
 
 夜間居残り作業申請が完了いたしました。
@@ -105,15 +110,19 @@ class RequestOvertimeProvider with ChangeNotifier {
 【作業内容】
 $useContent
 
+【添付ファイル】
+$attachedFilesText
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
-      _mailService.create({
-        'id': _mailService.id(),
-        'to': companyUserEmail,
-        'subject': '【自動送信】夜間居残り作業申請完了のお知らせ',
-        'message': message,
-        'createdAt': DateTime.now(),
-        'expirationAt': DateTime.now().add(const Duration(hours: 1)),
+        _mailService.create({
+          'id': _mailService.id(),
+          'to': companyUserEmail,
+          'subject': '【自動送信】夜間居残り作業申請完了のお知らせ',
+          'message': message,
+          'createdAt': DateTime.now(),
+          'expirationAt': DateTime.now().add(const Duration(hours: 1)),
+        });
       });
       //通知
       List<UserModel> sendUsers = [];
