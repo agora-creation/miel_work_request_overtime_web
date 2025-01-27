@@ -293,16 +293,6 @@ class _Step1ScreenState extends State<Step1Screen> {
                       fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   ),
-                  const Align(
-                    alignment: Alignment.centerRight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text('緊急連絡先：セコム コールセンター（088-885-6060）'),
-                        Text('百田 携帯（090-4506-0049）'),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 16),
                   const DottedDivider(),
                   const SizedBox(height: 32),
